@@ -1,0 +1,42 @@
+name: Validate library
+on: [push, pull_request, workflow_dispatch]
+permissions:
+  contents: read
+jobs:
+  host-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: bash tests/run.sh
+  arduino-build:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - {fqbn: 'arduino:avr:uno', core: 'arduino:avr', index: ''}
+          - {fqbn: 'arduino:avr:nano', core: 'arduino:avr', index: ''}
+          - {fqbn: 'arduino:avr:mega', core: 'arduino:avr', index: ''}
+          - {fqbn: 'esp32:esp32:esp32', core: 'esp32:esp32', index: 'https://espressif.github.io/arduino-esp32/package_esp32_index.json'}
+          - {fqbn: 'esp32:esp32:esp32c3', core: 'esp32:esp32', index: 'https://espressif.github.io/arduino-esp32/package_esp32_index.json'}
+          - {fqbn: 'esp32:esp32:esp32s3', core: 'esp32:esp32', index: 'https://espressif.github.io/arduino-esp32/package_esp32_index.json'}
+          - {fqbn: 'esp8266:esp8266:nodemcuv2', core: 'esp8266:esp8266', index: 'https://arduino.esp8266.com/stable/package_esp8266com_index.json'}
+          - {fqbn: 'rp2040:rp2040:rpipico', core: 'rp2040:rp2040', index: 'https://github.com/earlephilhower/arduino-pico/releases/download/global/package_rp2040_index.json'}
+          - {fqbn: 'STMicroelectronics:stm32:Nucleo_64:pnum=NUCLEO_F401RE', core: 'STMicroelectronics:stm32', index: 'https://github.com/stm32duino/BoardManagerFiles/raw/main/package_stmicroelectronics_index.json'}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: arduino/setup-arduino-cli@v2
+      - name: Install core and compile examples
+        env:
+          CORE: ${{ matrix.core }}
+          FQBN: ${{ matrix.fqbn }}
+          INDEX: ${{ matrix.index }}
+        run: |
+          extra=()
+          if [ -n "$INDEX" ]; then extra=(--additional-urls "$INDEX"); fi
+          arduino-cli core update-index "${extra[@]}"
+          arduino-cli core install "$CORE" "${extra[@]}"
+          arduino-cli core list
+          for sketch in examples/*; do
+            arduino-cli compile --fqbn "$FQBN" --library . "$sketch"
+          done
