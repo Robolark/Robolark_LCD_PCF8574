@@ -1,46 +1,10 @@
 # Step-by-step setup
 
-## 1. Create the GitHub repository
+The library is published at [Robolark/Robolark_LCD_PCF8574](https://github.com/Robolark/Robolark_LCD_PCF8574).
+Host tests and compilation for nine board targets passed. Physical LCD testing
+is still pending.
 
-On GitHub's **Create a new repository** page, enter:
-
-| Field | Value |
-| --- | --- |
-| Owner | Robolark |
-| Repository name | Robolark_LCD_PCF8574 |
-| Description | Common Arduino-compatible library for PCF8574T I2C character LCDs. |
-| Visibility | Public |
-| Add README | On, to initialize the default branch |
-| Add .gitignore | No .gitignore; a prepared file is included |
-| Add license | No license; an MIT LICENSE file is included |
-
-Click **Create repository**. Share the resulting repository URL so the prepared
-source can be uploaded through the connected GitHub account. Creating new
-repositories is not available through the current GitHub connector.
-
-## 2. Put the library files in the repository root
-
-If uploading manually, extract the installable ZIP. Open its inner
-`Robolark_LCD_PCF8574` directory. On GitHub choose **Add file > Upload files**.
-Upload its contents so `README.md`, `SETUP.md`, `LICENSE`, `library.properties`,
-`src/`, `examples/`, and `tests/` are at the repository root.
-Use the GitHub web editor or git to include dotfiles such as the supplied
-`.github/workflows/ci.yml` and `.gitignore` if your file picker hides them.
-Replace the generated README with the supplied README. Commit the files.
-
-Do not nest the entire library folder inside the repository: keeping the
-Arduino metadata at the repository root makes GitHub ZIP installation simple.
-The supplied MIT license permits reuse, modification and redistribution while
-retaining the copyright and license notice.
-
-## 3. Run the build checks
-
-Open GitHub **Actions > Validate library**. A push triggers the supplied workflow.
-Green builds verify compilation for the selected cores, not the physical LCD.
-If Actions is disabled for this new repository, enable it and run the workflow
-manually from its **Run workflow** button. Review any failed job before release.
-
-## 4. Install in Arduino IDE
+## 1. Install in Arduino IDE
 
 1. Download the supplied library ZIP, or GitHub **Code > Download ZIP**.
 2. Open Arduino IDE.
@@ -52,7 +16,7 @@ For non-AVR boards, also install the appropriate board package in Boards Manager
 using its official installation instructions. The library does not install a
 board core, USB driver, or upload tool for you.
 
-## 5. Wire the LCD
+## 2. Wire the LCD
 
 Disconnect power first. For Uno R3 or classic Nano, connect LCD VCC to 5V,
 GND to GND, SDA to A4, and SCL to A5.
@@ -78,7 +42,7 @@ Powering the entire LCD at 3.3V is not a guaranteed substitute for level shiftin
 
 Verify pin labels on your specific board and LCD, rather than connector order.
 
-## 6. Select the board and upload
+## 3. Select the board and upload
 
 1. In Arduino IDE choose **Tools > Board** and your exact board model.
 2. Choose **Tools > Port** and the connected board's port.
@@ -88,7 +52,7 @@ Verify pin labels on your specific board and LCD, rather than connector order.
 6. Look for `ROBOLARK` on line 1 and `LCD Working!` on line 2 in HelloRobolark.
 7. Slowly adjust RX1 if characters are invisible or show as solid blocks.
 
-## 7. Troubleshoot
+## 4. Troubleshoot
 
 Open Serial Monitor at **9600 baud** to read an error code. See the README's
 error table. Run **I2CScanner** using the same bus/pins as your LCD sketch (add the
@@ -104,7 +68,7 @@ module. An ACK confirms the expander responds, not that this mapping is correct.
 If contrast and wiring are correct but text still fails, verify the module's
 mapping using its schematic or continuity measurements with power disconnected.
 
-## 8. Release after hardware testing
+## 5. Release after hardware testing
 
 Test both lines, clear, cursor movement, custom characters, backlight switching
 and power cycling on the actual module. Record each tested board/core version.

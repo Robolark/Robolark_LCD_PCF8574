@@ -8,8 +8,9 @@ common **LCD driver**, not a general library for every sensor or programming
 environment. Bare-metal 8051, MicroPython, ESP-IDF-only, and desktop Raspberry Pi
 programs require separate ports.
 
-Version 0.1.0 is a development release: host tests pass, but the physical
-RG1602A-IIC(P) module and Arduino target builds have not yet been verified.
+Version 0.1.0 is a development release. Host tests and all nine Arduino board
+compilation jobs passed on GitHub Actions. The physical RG1602A-IIC(P) module
+has not yet been tested with this library.
 
 ## Install
 
@@ -155,15 +156,15 @@ configuration validation. They simulate I2C acknowledgments and do not establish
 physical timing, electrical compatibility, or the actual module's pin mapping.
 
 GitHub Actions is configured to run host tests and compile all examples for
-Uno, classic Nano, Mega, ESP32, ESP32-C3, ESP32-S3, ESP8266, RP2040 and STM32. Those Arduino builds have not run in this workspace.
-Before a stable release, run CI and upload HelloRobolark on the physical module;
+Uno, classic Nano, Mega, ESP32, ESP32-C3, ESP32-S3, ESP8266, RP2040 and STM32. All nine build jobs passed in [validation run 1](https://github.com/Robolark/Robolark_LCD_PCF8574/actions/runs/40130459827).
+Before a stable release, upload HelloRobolark on the physical module;
 verify both lines, contrast, custom characters, backlight, and power cycling.
 
 ## Development and publishing
 
-Intended repository: [Robolark/Robolark_LCD_PCF8574](https://github.com/Robolark/Robolark_LCD_PCF8574).
-Upload this folder's **contents** to the repository root, so `library.properties`
-and `src/` are at the top level. A step-by-step guide is in [SETUP.md](SETUP.md).
+Repository: [Robolark/Robolark_LCD_PCF8574](https://github.com/Robolark/Robolark_LCD_PCF8574).
+Source, examples, tests and the build workflow are published at the repository
+root. A step-by-step installation and wiring guide is in [SETUP.md](SETUP.md).
 Run CI and test the actual module before a stable release. GitHub hosting does
 not automatically add a library to Arduino Library Manager.
 
@@ -188,3 +189,23 @@ The pin numbers are documented example choices, not a universal board pinout.
 - [ESP8266 Wire API](https://github.com/esp8266/Arduino/blob/master/doc/libraries.rst)
 - [Arduino-Pico Wire API](https://arduino-pico.readthedocs.io/en/latest/wire.html)
 - [STM32duino I2C API](https://stm32duino.github.io/dev/libraries/built-in/I2C-library/)
+
+## Compilation results
+
+All three included examples compiled for each target in validation run 1:
+
+| Target | Compile result | Physical module test |
+| --- | --- | --- |
+| Uno R3 | Pass | Pending |
+| Classic Nano | Pass | Pending |
+| Mega 2560 | Pass | Pending |
+| ESP32 | Pass | Pending |
+| ESP32-C3 | Pass | Pending |
+| ESP32-S3 | Pass | Pending |
+| ESP8266 NodeMCU | Pass | Pending |
+| RP2040 Pico (Arduino-Pico) | Pass | Pending |
+| STM32 Nucleo F401RE (STM32duino) | Pass | Pending |
+
+These results establish compilation for the selected cores and variants, not
+compatibility with every microcontroller or physical LCD pin mapping. The build
+logs record the core versions used.
